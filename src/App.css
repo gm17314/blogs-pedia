@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC&family=Bebas+Neue&family=Oswald:wght@300&family=Poppins&display=swap');
+html {
+  font-size: 10px;
+}
+body {
+  min-height: 100vh;
+  background-image: linear-gradient(to left,#A0BEF8,#B5F0F0);
+}
+
+/* Responsive */
+/* For tablet and landscape mobiles */
+@media screen and (min-width: 620px) and (max-width:900px) {
+  html {
+      font-size: 5.3px;
+  }
+}
+
+/* For small laptop screens */
+@media screen and (min-width: 901px) and (max-width:1024px) {
+  html {
+      font-size: 6.5px;
+  }
+}
+
+/* For medium laptop screens */
+@media screen and (min-width: 1025px) and (max-width:1280px) {
+  html {
+      font-size: 7.5px;
+  }
+}
+
+/* For Mobile medium and large screen */
+@media screen and (max-width: 620px) {
+  html {
+      font-size: 4.5px;
+  }
+}
+
+/* For small screen mobile */
+@media screen and (max-width: 340px) {
+  html {
+      font-size: 3.7px;
+  }
+}
+
+/* For Jio phone */
+@media screen and (min-width: 100px) and (max-width:339px) {
+  html {
+      font-size: 2px;
+  }
+}

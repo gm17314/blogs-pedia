@@ -6,7 +6,7 @@ import SearchCards from "../Component/SearchCards";
 const Search = () => {
   const Search = styled.div`
     width: 100%;
-    min-height: 90vh;
+    min-height: 95vh;
     background-color: #D6E4F0;
     padding-top: 3rem;
     padding-bottom:1rem;

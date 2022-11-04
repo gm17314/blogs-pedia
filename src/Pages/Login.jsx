@@ -4,7 +4,7 @@ import { pagecolor,flex,headingfont,titlecolor,parafont } from '../Component/Com
 
 const Login = () => {
     const Login = styled(flex)`
-        height: 90vh;
+        height: 100vh;
         width: 100%;
     `
     const LoginBox = styled(flex)`

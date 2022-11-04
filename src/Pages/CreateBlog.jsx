@@ -5,7 +5,7 @@ import { FaImage } from "react-icons/fa";
 const CreateBlog = () => {
   const Create = styled.div`
     width: 100%;
-    min-height: 90vh;
+    min-height: 95vh;
     background-color: #d6e4f0;
   `;
   const H1 = styled.h2`

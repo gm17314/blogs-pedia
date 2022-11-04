@@ -11,7 +11,7 @@ import {
 
 const Signup = () => {
   const Signup = styled(flex)`
-    height: 90vh;
+    height: 100vh;
     width: 100%;
   `;
   const SignupBox = styled(flex)`

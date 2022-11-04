@@ -79,10 +79,11 @@ nav {
 }
 
 @media (max-width: 620px) {
-  nav {
+  nav {width:100%;
     position: relative;
     padding: 0;
   }
+  .logo{position: absolute;left: 5%;}
   .hamburger {
     display: flex;
     position: absolute;
@@ -102,9 +103,7 @@ nav {
     position: absolute;
     left: 0;
   }
-  .navmenu-items {
-    flex-direction: column;
-  }
+
   .navmenu-items {
     flex-direction: row;
   }
@@ -115,6 +114,9 @@ nav {
     font-weight: 500;
   }
   .nav-userdetail {
-    width: 22%;
+    width: 24%;
+    position: absolute;
+    right: 5%;
   }
+  .nav-userdetail img{margin: 0 1rem;}
 }

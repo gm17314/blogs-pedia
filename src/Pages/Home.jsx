@@ -6,7 +6,7 @@ import Cards from '../Component/Cards'
 const Home = () => {
   const Home = styled.div`
     width: 100%;
-    min-height: 95vh;
+    min-height: 97vh;
     background-color: #D6E4F0;
   `;
   const H1 = styled.h2`

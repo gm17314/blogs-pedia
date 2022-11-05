@@ -33,7 +33,7 @@ nav {
   height: 6rem;
   list-style: none;
   justify-content: space-around;
-  transition: all 0.8s;
+
 }
 .navmenu a {
   font-size: 2.5rem;
@@ -98,6 +98,7 @@ nav {
     background-color: #1e56a0;
     border-top: 1px solid rgb(14, 14, 168);
     left: -100%;
+    transition: all 0.8s;
   }
   .active {
     position: absolute;

@@ -7,7 +7,7 @@ import { GoThreeBars} from "react-icons/go";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 const Navbar = () => {
-    const [open,setOpen] = useState(true)
+    const [open,setOpen] = useState(false)
     const hamburger = ()=>open?setOpen(false):setOpen(true);
   return (
     <nav className="d-flex" style={{ justifyContent: "space-between" }}>

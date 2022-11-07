@@ -3,6 +3,8 @@ import styled from "styled-components";
 import MyBlogCard from "./MyBlogCard";
 
 const MyBlogs = () => {
+  
+
   const Cards = styled.div`
     width: 90%;
     height: 45rem;
@@ -14,7 +16,6 @@ const MyBlogs = () => {
     &::-webkit-scrollbar {
       width: 0.5rem;
     }
-
     &::-webkit-scrollbar-thumb {
       border-radius: 0.5rem;
       background-color: grey;

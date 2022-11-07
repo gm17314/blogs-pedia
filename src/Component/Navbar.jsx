@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Navbar.css";
 import { FaPencilAlt, FaSearch, FaUserCircle } from "react-icons/fa";
-import { ImCross} from "react-icons/im";
-import { RiHomeSmileFill} from "react-icons/ri";
-import { GoThreeBars} from "react-icons/go";
+import { ImCross } from "react-icons/im";
+import { RiHomeSmileFill } from "react-icons/ri";
+import { GoThreeBars } from "react-icons/go";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../Firebaseconfig";
+
 const Navbar = () => {
-    const [open,setOpen] = useState(false)
-    const hamburger = ()=>open?setOpen(false):setOpen(true);
+  const [open, setOpen] = useState(false);
+
+  const currentUser = useContext(AuthContext);
+  console.log(currentUser)
+
+  const logOut=()=>{
+    signOut(auth);
+  }
+
+  const hamburger = () => (open ? setOpen(false) : setOpen(true));
   return (
     <nav className="d-flex" style={{ justifyContent: "space-between" }}>
       <div className="logo d-flex">Blogspedia</div>
-      <div className="hamburger d-flex" style={{fontSize:`${open?"3rem":"4rem"}`}} onClick={hamburger}>{open?<ImCross/>:<GoThreeBars/>}</div>
-      <ul className={`navmenu d-flex ${open?"active":""}`}>
-      <li>
+      <div
+        className="hamburger d-flex"
+        style={{ fontSize: `${open ? "3rem" : "4rem"}` }}
+        onClick={hamburger}
+      >
+        {open ? <ImCross /> : <GoThreeBars />}
+      </div>
+      <ul className={`navmenu d-flex ${open ? "active" : ""}`}>
+        <li>
           <Link to="/">
             <div className="navmenu-items d-flex" onClick={hamburger}>
               <RiHomeSmileFill /> <span className="iconname">Home</span>
@@ -44,12 +62,12 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="nav-userdetail d-flex">
-        <span className="username">Gaurav</span>
+        <span className="username">{currentUser.displayName}</span>
         <img
-          src="https://images.pexels.com/photos/3810915/pexels-photo-3810915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src={currentUser.photoURL}
           alt=""
         />
-        <button className="logout">LogOut</button>
+        <button className="logout" onClick={logOut}>LogOut</button>
       </div>
     </nav>
   );

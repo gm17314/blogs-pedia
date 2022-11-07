@@ -1,11 +1,33 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { titlecolor, headingfont, parafont, flex } from "../Component/Common";
-import { FaRegHeart,FaRegEdit } from 'react-icons/fa';
+import { FaRegHeart,FaRegEdit,FaHeart } from 'react-icons/fa';
 import {MdDeleteForever} from 'react-icons/md';
+import { AuthContext } from "../AuthContext";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from "../Firebaseconfig";
 
+const Card = (props) => {
+const currentUser = useContext(AuthContext);
+const docRef = doc(db,"blogs",props.docID);
+const handleLikes = async()=>{
+  if (props.likes.includes(currentUser.uid)){
+    var ind = props.likes.indexOf(currentUser.uid)
+    props.likes.splice(ind,1);
+  }
+  else{
+    props.likes.push(currentUser.uid);
+  }
+  await updateDoc(docRef,{likes:props.likes})
+}
 
-const Card = () => {
+const handleDelete = async()=>{
+  const confirm=window.confirm("Do you want to delete this blog")
+  if (confirm){
+    await deleteDoc(docRef)
+  }
+}
+
   const Card = styled.div`
     display: flex;
     height: 23rem;
@@ -31,7 +53,7 @@ const Card = () => {
     font-size: 2.5rem;
   `;
   const Date = styled.span`
-    color: grey;
+    color: #021f46;
     /* font-family: ${headingfont}; */
     font-size: 1.3rem;
   `;
@@ -46,13 +68,14 @@ const Card = () => {
   const Title = styled.h2`
     color: black;
     font-family: ${parafont};
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    margin-bottom:.5rem;
   `;
   const Para = styled.p`
-    color: black;
+    color: #242323;
     /* font-family: ${parafont}; */
     font-weight: 500;
-    font-size: 1.35rem;
+    font-size: 1.5rem;
   `;
   const Button = styled.button`
   color: white;
@@ -63,6 +86,7 @@ const Card = () => {
   border-radius: .4rem;
   padding:.2rem .5rem;
   border: 1px solid blue;
+  cursor: pointer;
 `;
 const Options = styled(flex)`
 justify-content: space-between;
@@ -81,7 +105,7 @@ height:100%;
 font-size: 1.5rem;
 margin-top:.4rem;
 color:red;
-
+cursor: pointer;
 `
 const LikeCount = styled.span`
 font-size: 1.5rem;
@@ -94,34 +118,35 @@ height:100%;
 font-size: 2rem;
 margin-top:.4rem;
 color:grey;
+cursor: pointer;
 `
 const Delete = styled.div`
 height:100%;
 font-size: 2.1rem;
 margin-top:.4rem;
 color:grey;
+cursor: pointer;
 `
   return (
     <Card>
-      <Left src="https://images.pexels.com/photos/3810915/pexels-photo-3810915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+      <Left src={props.image} />
       <Right>
-        <H2>Admin</H2>
-        <Date>20feb2002</Date>
+        <H2>{props.adminName}</H2>
+        <Date>{props.date}</Date>
         <Content>
-          <Title>Anniversary</Title>
+          <Title>{props.title}</Title>
           <Para>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta
-            assumenda voluptatum quaerat inventore labore quam temporibus
+            {props.content}
           </Para>
         </Content>
         <Button>Read</Button>
         <Options>
           <Div>
-          <LikeCount>2</LikeCount>
-          <Like>< FaRegHeart/></Like>
+          <LikeCount>{props.likes.length}</LikeCount>
+          <Like onClick={handleLikes}>{props.likes.includes(currentUser.uid)?<FaHeart/>:< FaRegHeart/>}</Like>
           </Div>
-          <Edit><FaRegEdit/></Edit>
-          <Delete><MdDeleteForever/></Delete>
+          {(currentUser.uid === props.adminID) && <Edit><FaRegEdit/></Edit>}
+          {(currentUser.uid === props.adminID) && <Delete onClick={handleDelete}><MdDeleteForever/></Delete>}
         </Options>
       </Right>
 

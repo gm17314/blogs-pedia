@@ -1,8 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { headingfont, titlecolor, parafont, flex } from "../Component/Common";
 import { FaImage } from "react-icons/fa";
+import { AuthContext } from "../AuthContext";
+import { db } from "../Firebaseconfig";
+import { addDoc, collection } from "firebase/firestore";
+import { storage } from "../Firebaseconfig";
+import { uploadBytesResumable ,getDownloadURL, ref } from "firebase/storage";
+
+
 const CreateBlog = () => {
+const currentUser = useContext(AuthContext);
+
+const handleSubmit = async (e)=>{
+  e.preventDefault();
+  const blogTitle = e.target[0].value;
+  const blogContent = e.target[1].value;
+  const blogImage = e.target[2].files[0];
+  const collectionRef = collection(db,"blogs")
+  const date = new Date();
+  const today = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`;
+  const storageRef = ref(storage, `blogsImage/${blogTitle+date.getTime()}`);
+  await uploadBytesResumable(storageRef, blogImage).then(() => {
+    getDownloadURL(storageRef).then(async (downloadURL) => {
+      try {
+       await addDoc(collectionRef,{
+        title:blogTitle,
+        content:blogContent,
+        image:downloadURL,
+        adminName:currentUser.displayName,
+        adminID:currentUser.uid,
+        date: today,
+        likes: []
+       })
+       alert("Your blog has been published😊")
+      } catch (error) {
+          console.log(error.message)
+      }
+    });
+  });
+}
+
+
+
   const Create = styled.div`
     width: 100%;
     min-height: 97vh;
@@ -90,12 +130,13 @@ const CreateBlog = () => {
     border: 1px solid blue;
     margin:auto;
     margin-top:1.5rem;
+    cursor:pointer;
   `;
 
   return (
     <Create>
       <H1>Create Blog</H1>
-      <Form>
+      <Form onSubmit={(e)=>handleSubmit(e)}>
         <H2>Write Blog Title👇</H2>
         <Input placeholder="Title..." />
         <H2>Content👀</H2>

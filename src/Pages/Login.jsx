@@ -1,17 +1,41 @@
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import React from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { pagecolor,flex,headingfont,titlecolor,parafont } from '../Component/Common'
+import { auth } from '../Firebaseconfig'
+
 
 const Login = () => {
+  
+  const [err, setErr] = useState(false);
+  const navigate = useNavigate()
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    try {
+      await signInWithEmailAndPassword(auth,email,password)
+      navigate("/")
+    } catch (error) {
+      console.log(error);
+      setErr(true);
+    }
+  };
+
     const Login = styled(flex)`
         height: 100vh;
         width: 100%;
     `
-    const LoginBox = styled(flex)`
+    const LoginBox = styled.form`
     height: 40rem;
     width: 30%;
     background-color:${pagecolor};
     border-radius: 1rem;
+    display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: space-evenly;
     box-shadow: 0 0 1rem 2px  grey;
@@ -59,12 +83,12 @@ const Login = () => {
 
   return (
     <Login>
-      <LoginBox>
+      <LoginBox onSubmit={handleLogin}>
       <H1>Login</H1>
       <Input type="email" placeholder='Enter email...'/>
       <Input type="password" placeholder='Enter password...'/>
       <Button>Login</Button>
-      <Error>Something went wrong!!!</Error>
+      {err && <Error>Something went wrong!!!</Error>}
       <Anchor href='/signup'>Create an account?</Anchor>
       </LoginBox>
     </Login>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { headingfont} from "../Component/Common";
 import MyBlogs from "../Component/MyBlogs";
 
-const ProfileRight = () => {
+const ProfileRight = ({userID}) => {
   const Right = styled.div`
     width: 60%;
     min-height: 90vh;
@@ -70,7 +70,7 @@ const ProfileRight = () => {
           <label>Followers</label>
         </TotalFollowing>
       </Details>
-      <MyBlogs />
+      <MyBlogs userID={userID}/>
     </Right>
   );
 };

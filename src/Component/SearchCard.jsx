@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { headingfont, titlecolor } from "./Common";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { db } from "../Firebaseconfig";
+import { AuthContext } from "../AuthContext";
+import { Link } from "react-router-dom";
 
-const SearchCard = () => {
+const SearchCard = (props) => {
+  const currentUser = useContext(AuthContext);
+  const [currentUserData, setCurrentUserData] = useState();
+  const docRef = doc(db, "users", currentUser.uid);
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
+      setCurrentUserData(doc.data());
+    });
+    // console.log(blogs)
+    return () => {
+      unsub();
+    };
+    // eslint-disable-next-line
+  }, []);
+  const handleFollowing = async () => {
+    if (currentUserData.following.includes(props.userID)) {
+      var ind = currentUserData.following.indexOf(props.userID);
+      currentUserData.following.splice(ind, 1);
+    } else {
+      currentUserData.following.push(props.userID);
+    }
+    await updateDoc(docRef, { following: currentUserData.following });
+  };
+
   const Card = styled.div`
     width: 95%;
     height: 8rem;
@@ -10,8 +37,7 @@ const SearchCard = () => {
     margin: 1.6rem;
     justify-content: space-between;
     align-items: center;
-    border-bottom:2px solid grey;
-    
+    border-bottom: 2px solid grey;
   `;
   const User = styled.div`
     width: 60%;
@@ -19,7 +45,6 @@ const SearchCard = () => {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    
   `;
   const Img = styled.img`
     border-radius: 50%;
@@ -35,8 +60,12 @@ const SearchCard = () => {
   `;
   const Name = styled.h2`
     /* color: ${titlecolor}; */
+    cursor:pointer;
+    text-decoration: none;
+    font-weight:bold;
     font-family: ${headingfont};
     font-size: 2.5rem;
+    color:black;
   `;
   const Email = styled.p`
     color: grey;
@@ -45,26 +74,31 @@ const SearchCard = () => {
   `;
   const Button = styled.button`
     color: white;
-    background-color:#0000ffdb;
+    background-color: #0000ffdb;
     font-family: "Poppins";
     font-weight: 600;
     font-size: 2.3rem;
     border-radius: 0.4rem;
     padding: 0.3rem 0.6rem;
-    border:0;
-    cursor:pointer;
-    
+    border: 0;
+    cursor: pointer;
   `;
   return (
     <Card>
       <User>
-        <Img src="https://images.pexels.com/photos/3810915/pexels-photo-3810915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+        <Img src={props.photoURL} />
         <Detail>
-          <Name>Gaurav</Name>
-          <Email>gm20february2002@gmail.com</Email>
+          <Name as={Link} to={`/profile/${props.adminID}`}>{props.displayName}</Name>
+          <Email>{props.email}</Email>
         </Detail>
       </User>
-      <Button>Follow</Button>
+      <Button onClick={handleFollowing}>
+              {currentUserData?.following.includes(props.userID)?
+                "Unfollow"
+               : 
+                "Follow"
+              }
+      </Button>
     </Card>
   );
 };

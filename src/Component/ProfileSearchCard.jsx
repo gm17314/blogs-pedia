@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { headingfont, titlecolor } from "./Common";
 
 
-const ProfileSearchCard = () => {
+const ProfileSearchCard = ({email,photoURL,displayName,userID}) => {
   const Card = styled.div`
     width: 93%;
     height: 9rem;
@@ -38,6 +39,10 @@ const ProfileSearchCard = () => {
     /* color: ${titlecolor}; */
     font-family: ${headingfont};
     font-size: 2.5rem;
+    cursor:pointer;
+    text-decoration: none;
+    font-weight:bold;
+    color:black;
   `;
   const Email = styled.p`
     color: grey;
@@ -58,10 +63,10 @@ const ProfileSearchCard = () => {
   return (
     <Card>
       <User>
-        <Img src="https://images.pexels.com/photos/3810915/pexels-photo-3810915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+        <Img src={photoURL} />
         <Detail>
-          <Name>Gaurav</Name>
-          <Email>gm20february2002@gmail.com</Email>
+          <Name as={Link} to={`/profile/${userID}`}>{displayName}</Name>
+          <Email>{email}</Email>
         </Detail>
       </User>
       <Button>Follow</Button>

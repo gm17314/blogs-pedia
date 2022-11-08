@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import MyBlogCard from "./MyBlogCard";
+import { db } from "../Firebaseconfig";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useState } from "react";
 
-const MyBlogs = () => {
-  
+const MyBlogs = ({userID}) => {
+  const collectionRef = collection(db, "blogs");
+  const [blogs, setBlogs] = useState([]);
+
+  //! Realtime Read of todos
+  useEffect(() => {
+    const unsub = onSnapshot(collectionRef, (snapshot) => {
+      setBlogs(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+    // console.log(blogs)
+    return () => {
+      unsub();
+    };
+
+    // eslint-disable-next-line
+  }, []);
 
   const Cards = styled.div`
     width: 90%;
@@ -23,11 +40,22 @@ const MyBlogs = () => {
   `;
   return (
     <Cards>
-      <MyBlogCard />
-      <MyBlogCard />
-      <MyBlogCard />
-      <MyBlogCard />
-      <MyBlogCard />
+{blogs.map((ele) => {
+        return (
+          userID === ele.adminID && 
+          <MyBlogCard
+            key={ele.id}
+            title={ele.title}
+            content={ele.content}
+            image={ele.image}
+            adminName={ele.adminName}
+            adminID={ele.adminID}
+            date={ele.date}
+            docID={ele.id}
+            likes={ele.likes}
+          />
+        );
+      })}
     </Cards>
   );
 };

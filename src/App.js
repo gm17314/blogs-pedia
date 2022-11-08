@@ -10,7 +10,6 @@ import Profile from "./Pages/Profile";
 import { AuthContext } from "./AuthContext";
 import { useContext } from "react";
 
-
 function App() {
   const currentUser = useContext(AuthContext);
   const ProtectedRoute = ({ children }) => {
@@ -53,7 +52,7 @@ function App() {
           }
         />
         <Route
-          path="/profile"
+          path="/profile/:userID"
           element={
             <ProtectedRoute>
               <Profile />

@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { headingfont, parafont, titlecolor } from "../Component/Common";
 import ProfileSearchCards from "../Component/ProfileSearchCards";
 import { TfiPencilAlt } from "react-icons/tfi";
+import { useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../Firebaseconfig";
+import { AuthContext } from "../AuthContext";
 
-const ProfileLeft = () => {
+const ProfileLeft = ({ userID }) => {
+  const currentUser = useContext(AuthContext);
+  const [currentUserData, setCurrentUserData] = useState();
+  // const docRef = doc(db, "users", userID);
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "users", userID), (doc) => {
+      setCurrentUserData(doc.data());
+    });
+
+    return () => {
+      unsub();
+    };
+    // eslint-disable-next-line
+  }, [userID]);
+
   const Left = styled.div`
     width: 40%;
     min-height: 90vh;
@@ -59,17 +77,20 @@ const ProfileLeft = () => {
   `;
   return (
     <Left>
-      <Img src="https://images.pexels.com/photos/3810915/pexels-photo-3810915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+      {console.log(currentUserData)}
+      <Img src={currentUserData?.photoURL} />
       <Name>
-        Gaurav Maurya{" "}
-        <span>
-          <TfiPencilAlt />
-        </span>
+        {currentUserData?.displayName}{" "}
+        {currentUser.uid === userID && (
+          <span>
+            <TfiPencilAlt />
+          </span>
+        )}
       </Name>
-      <Email>gm20february2002@gmail.com</Email>
+      <Email>{currentUserData?.mail}</Email>
       <Searchbox>
         <Input placeholder="Search followers..." />
-        <ProfileSearchCards />
+        <ProfileSearchCards following={currentUserData?.following}/>
       </Searchbox>
     </Left>
   );

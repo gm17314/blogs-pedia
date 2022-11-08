@@ -1,8 +1,27 @@
-import React from 'react'
+import { collection, onSnapshot } from 'firebase/firestore';
+import React, { useEffect } from 'react'
+import { useState } from 'react';
 import styled from 'styled-components';
+import { db } from '../Firebaseconfig';
 import ProfileSearchCard from './ProfileSearchCard';
 
-const ProfileSearchCards = () => {
+const ProfileSearchCards = ({following}) => {
+  const collectionRef = collection(db, "users");
+  const [user, setUser] = useState([]);
+
+  //! Realtime Read of todos
+  useEffect(() => {
+    const unsub = onSnapshot(collectionRef, (snapshot) => {
+      setUser(snapshot.docs.map((doc) => ({ ...doc.data() })));
+    });
+    // console.log(blogs)
+    return () => {
+      unsub();
+    };
+
+    // eslint-disable-next-line
+  }, []);
+
     const Cards = styled.div`
     width: 100%;
     height: 22.5rem;
@@ -21,9 +40,17 @@ const ProfileSearchCards = () => {
   `;
   return (
     <Cards>
-      <ProfileSearchCard/>
-      <ProfileSearchCard/>
-      <ProfileSearchCard/>
+      {user.map((obj)=>{
+        return (
+        (following.includes(obj.id)) &&
+        <ProfileSearchCard 
+        displayName = {obj.displayName}
+        email = {obj.mail}
+        photoURL = {obj.photoURL}
+        userID= {obj.id}
+        />
+        )
+      })}
     </Cards>
   )
 }

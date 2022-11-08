@@ -14,7 +14,6 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const currentUser = useContext(AuthContext);
-  console.log(currentUser)
 
   const logOut=()=>{
     signOut(auth);
@@ -54,7 +53,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/profile">
+          <Link to={`/profile/${currentUser.uid}`}>
             <div className="navmenu-items d-flex" onClick={hamburger}>
               <FaUserCircle /> <span className="iconname">Profile</span>
             </div>

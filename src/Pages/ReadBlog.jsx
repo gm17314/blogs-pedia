@@ -16,6 +16,7 @@ const ReadBlog = () => {
       setUser(data.docs.map((doc)=>({...doc.data(),id:doc.id})))
   };
   docss()
+  // eslint-disable-next-line
 },[])
 
   const Read = styled.div`

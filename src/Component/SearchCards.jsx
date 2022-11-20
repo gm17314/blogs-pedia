@@ -5,15 +5,15 @@ import { db } from "../Firebaseconfig";
 import SearchCard from "./SearchCard";
 import { AuthContext } from "../AuthContext";
 
-const SearchCards = () => {
+const SearchCards = ({search}) => {
   const currentUser = useContext(AuthContext);
   const collectionRef = collection(db, "users");
-  const [blogs, setBlogs] = useState([]);
+  const [users, setUsers] = useState([]);
 
   //! Realtime Read of todos
   useEffect(() => {
     const unsub = onSnapshot(collectionRef, (snapshot) => {
-      setBlogs(snapshot.docs.map((doc) => ({ ...doc.data() })));
+      setUsers(snapshot.docs.map((doc) => ({ ...doc.data() })));
     });
     // console.log(blogs)
     return () => {
@@ -31,7 +31,7 @@ const SearchCards = () => {
   `;
   return (
     <Cards>
-      {blogs.map((ele) => {
+      {users.filter((e) => e.displayName.toLowerCase().includes(search.toLowerCase())).map((ele) => {
           return (
             (currentUser.uid !== ele.id) &&
             <SearchCard
@@ -40,6 +40,7 @@ const SearchCards = () => {
               photoURL={ele.photoURL}
               displayName={ele.displayName}
               userID={ele.id}
+              adminID={ele.id}
             />
           );
       })}

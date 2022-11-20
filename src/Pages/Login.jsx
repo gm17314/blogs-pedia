@@ -39,6 +39,10 @@ const Login = () => {
     flex-direction: column;
     justify-content: space-evenly;
     box-shadow: 0 0 1rem 2px  grey;
+    @media (max-width:620px){
+      width: 50%;
+      height:45rem;
+    }
 `
     const H1 = styled.h2`
     color: ${titlecolor};
@@ -55,6 +59,8 @@ const Login = () => {
         outline: 0;
         background-color: #fdfafac2;
         font-family:${parafont};
+  
+        
     `
     const Button = styled.button`
         background-color: ${titlecolor};
@@ -65,6 +71,7 @@ const Login = () => {
         border:0;
         border-radius:5px;
         cursor: pointer;
+        transition:all .2s;
         transform:perspective(15rem) rotateX(45deg);
         &:hover{ transform:perspective(30rem) rotateX(0);}
        

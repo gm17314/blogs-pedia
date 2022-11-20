@@ -1,17 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { headingfont, parafont, titlecolor } from "../Component/Common";
 import ProfileSearchCards from "../Component/ProfileSearchCards";
-import { TfiPencilAlt } from "react-icons/tfi";
+import { FaEdit } from "react-icons/fa";
 import { useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../Firebaseconfig";
 import { AuthContext } from "../AuthContext";
 
-const ProfileLeft = ({ userID }) => {
+const ProfileLeft = ({ userID,open }) => {
+  const [search, setSearch] = useState("");
   const currentUser = useContext(AuthContext);
   const [currentUserData, setCurrentUserData] = useState();
-  // const docRef = doc(db, "users", userID);
+  const docRef = doc(db, "users", userID);
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "users", userID), (doc) => {
       setCurrentUserData(doc.data());
@@ -23,6 +24,19 @@ const ProfileLeft = ({ userID }) => {
     // eslint-disable-next-line
   }, [userID]);
 
+  const name = useRef();
+  const handleEdit = async () => {
+    var person = prompt("Please enter your name");
+    
+      if (
+        person !== null
+      ) {
+        await updateDoc(docRef, { displayName:person });
+        // await updateDoc(docRef, {  });
+    
+    }
+  };
+
   const Left = styled.div`
     width: 40%;
     min-height: 90vh;
@@ -31,27 +45,52 @@ const ProfileLeft = ({ userID }) => {
     align-items: center;
     /* border: 1px solid red; */
     padding-top: 2rem;
+    @media (max-width:620px) {
+      position:absolute;
+      width:100%;
+      left:${open?"0%":"-100%"}
+
+    }
   `;
   const Img = styled.img`
     border-radius: 50%;
     height: 13rem;
-    width: 13rem;
+    width:13rem;
+    @media (max-width:620px) {
+   width: ${open?"13rem":"0"};}
   `;
+  const Div = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    margin-top:1rem;
+    padding: 0;
+    & span {font-size:2.8rem;
+      cursor: pointer;
+      margin-left: 2.4rem;
+      color: #233744;
+      border: 1px soild red;
+      
+    } 
+    @media (max-width:620px)  {
+      display: ${open?"flex":"none"};
+    }
+
+  `
   const Name = styled.h2`
     /* color: ${titlecolor}; */
     font-family: ${headingfont};
     font-size: 3.5rem;
-    margin-top: 1.5rem;
-    margin-left: 4rem;
-    & span {
-      cursor: pointer;
-      margin-left: 1rem;
-    }
+    color: #10181d;
+
   `;
   const Email = styled.p`
     color: #5f5d5d;
     font-weight: 500;
     font-size: 2.4rem;
+    @media (max-width:620px) {
+    display: ${open?"inline-block":"none"};}
   `;
   const Searchbox = styled.div`
     width: 90%;
@@ -77,20 +116,21 @@ const ProfileLeft = ({ userID }) => {
   `;
   return (
     <Left>
-      {console.log(currentUserData)}
+      {/* {console.log(currentUserData)} */}
       <Img src={currentUserData?.photoURL} />
-      <Name>
-        {currentUserData?.displayName}{" "}
+      <Div>
+        <Name ref={name}>
+          {currentUserData?.displayName}</Name>
         {currentUser.uid === userID && (
-          <span>
-            <TfiPencilAlt />
+          <span onClick={handleEdit}>
+            <FaEdit />
           </span>
         )}
-      </Name>
+      </Div>
       <Email>{currentUserData?.mail}</Email>
       <Searchbox>
-        <Input placeholder="Search followers..." />
-        <ProfileSearchCards following={currentUserData?.following}/>
+        <Input placeholder="Search followers..." value={search} onChange={(event) => setSearch(event.target.value)}/>
+        <ProfileSearchCards search={search} following={currentUserData?.following} />
       </Searchbox>
     </Left>
   );

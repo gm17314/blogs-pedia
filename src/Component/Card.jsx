@@ -31,7 +31,7 @@ const Card = (props) => {
         blogTitle.current.innerText !== null &&
         blogContent.current.innerText !== null
       ) {
-        await updateDoc(docRef, { title: blogTitle.current.innerText,content: blogContent.current.innerText });
+        await updateDoc(docRef, { title: blogTitle.current.innerText, content: blogContent.current.innerText });
         // await updateDoc(docRef, {  });
       }
     }
@@ -52,6 +52,10 @@ const Card = (props) => {
     overflow: hidden;
     background-color: #f4f7fa;
     margin: 2rem;
+    @media (max-width:620px){
+      height:23rem;
+      
+    }
   `;
   const Left = styled.img`
     height: 100%;
@@ -148,7 +152,7 @@ const Card = (props) => {
   `;
   return (
     <Card>
-      <Left src={props.image} />
+      <Left src={props.image } />
       <Right>
         <H2 as={Link} to={`/profile/${props.adminID}`}>{props.adminName}</H2><br />
         <Date>{props.date}</Date>
@@ -168,7 +172,7 @@ const Card = (props) => {
             {props.content}
           </Para>
         </Content>
-        <Button>Read</Button>
+        <Button><a style={{textDecoration:"none",color:"inherit"}} href={`/read/${props.docID}`}>Read</a></Button>
         <Options>
           <Div>
             <LikeCount>{props.likes.length}</LikeCount>

@@ -47,6 +47,7 @@ const handleSubmit = async (e)=>{
     width: 100%;
     min-height: 97vh;
     background-color: #d6e4f0;
+    margin:0;
   `;
   const H1 = styled.h2`
     color: ${titlecolor};

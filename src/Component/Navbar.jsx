@@ -48,7 +48,7 @@ const Navbar = () => {
         <li>
           <Link to="/search">
             <div className="navmenu-items d-flex" onClick={hamburger}>
-              <FaSearch /> <span className="iconname">Search</span>
+              <FaSearch /> <span className="iconname">SearchUser</span>
             </div>
           </Link>
         </li>

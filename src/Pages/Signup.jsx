@@ -73,6 +73,10 @@ const Signup = () => {
     flex-direction: column;
     justify-content: space-evenly;
     box-shadow: 0 0 1rem 2px grey;
+    @media (max-width:620px){
+      width: 70%;
+      height:60rem;
+    }
   `;
   const H1 = styled.h2`
     color: ${titlecolor};
@@ -100,6 +104,7 @@ const Signup = () => {
     cursor: pointer;
     border: 0;
     border-radius: 5px;
+    transition: all .2s;
     transform: perspective(15rem) rotateX(45deg);
     &:hover {
       transform: perspective(30rem) rotateX(0);

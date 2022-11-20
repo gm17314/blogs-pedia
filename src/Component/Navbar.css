@@ -48,8 +48,8 @@ nav {
   flex-direction: column;
 }
 .nav-userdetail {
-  justify-content: space-between;
-  width: 20%;
+  justify-content: space-evenly;
+  width: 23%;
   height: 6.5rem;
 }
 .nav-userdetail span {
@@ -100,6 +100,7 @@ nav {
     border-top: 1px solid rgb(14, 14, 168);
     left: -100%;
     transition: all 0.8s;
+    z-index: 5;
   }
   .active {
     position: absolute;
@@ -118,7 +119,7 @@ nav {
   .nav-userdetail {
     width: 24%;
     position: absolute;
-    right: 5%;
+    right: 4%;
   }
   .nav-userdetail img{margin: 0 1rem;}
 }

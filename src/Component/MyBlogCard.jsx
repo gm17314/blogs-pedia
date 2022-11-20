@@ -57,6 +57,9 @@ const MyBlogCard = (props) => {
     background-color: #f4f7fa;
     margin: 2rem;
     margin-top: 0;
+    @media (max-width:620px) {
+      height: 20rem;
+    }
   `;
   const Left = styled.img`
     height: 100%;
@@ -102,6 +105,9 @@ const MyBlogCard = (props) => {
     border: ${edit ? ".1rem solid grey" : 0};
   `;
   const Button = styled.button`
+  display:flex;
+  justify-content: center;
+  align-Items:center;
     color: white;
     background-color: ${titlecolor};
     font-family: ${headingfont};
@@ -111,6 +117,9 @@ const MyBlogCard = (props) => {
     padding: 0.2rem 0.5rem;
     border: 1px solid blue;
     cursor: pointer;
+    @media (max-width:620px){
+      padding: 0 0.5rem;
+    }
   `;
   const Options = styled(flex)`
     justify-content: space-between;

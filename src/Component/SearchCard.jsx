@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 const SearchCard = (props) => {
   const currentUser = useContext(AuthContext);
   const [currentUserData, setCurrentUserData] = useState();
+  const [follow, setFollow] = useState(false)
   const docRef = doc(db, "users", currentUser.uid);
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
@@ -28,6 +29,7 @@ const SearchCard = (props) => {
       currentUserData.following.push(props.userID);
     }
     await updateDoc(docRef, { following: currentUserData.following });
+    setFollow(!follow)
   };
 
   const Card = styled.div`
@@ -73,8 +75,8 @@ const SearchCard = (props) => {
     font-size: 1.7rem;
   `;
   const Button = styled.button`
-    color: white;
-    background-color: #0000ffdb;
+    color:${follow ? "#0000ffdb" : " white"};
+    background-color: ${follow ? "white" : "#0000ffdb"};
     font-family: "Poppins";
     font-weight: 600;
     font-size: 2.3rem;
@@ -82,6 +84,7 @@ const SearchCard = (props) => {
     padding: 0.3rem 0.6rem;
     border: 0;
     cursor: pointer;
+    width: 13rem;
   `;
   return (
     <Card>
@@ -93,11 +96,11 @@ const SearchCard = (props) => {
         </Detail>
       </User>
       <Button onClick={handleFollowing}>
-              {currentUserData?.following.includes(props.userID)?
-                "Unfollow"
-               : 
-                "Follow"
-              }
+        {currentUserData?.following.includes(props.userID) ?
+          "UnFollow"
+          :
+          "Follow"
+        }
       </Button>
     </Card>
   );

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { db } from '../Firebaseconfig';
 import ProfileSearchCard from './ProfileSearchCard';
 
-const ProfileSearchCards = ({following}) => {
+const ProfileSearchCards = ({following,search}) => {
   const collectionRef = collection(db, "users");
   const [user, setUser] = useState([]);
 
@@ -40,7 +40,7 @@ const ProfileSearchCards = ({following}) => {
   `;
   return (
     <Cards>
-      {user.map((obj)=>{
+      {user.filter((e) => e.displayName.toLowerCase().includes(search.toLowerCase())).map((obj)=>{
         return (
         (following.includes(obj.id)) &&
         <ProfileSearchCard 
@@ -48,6 +48,7 @@ const ProfileSearchCards = ({following}) => {
         email = {obj.mail}
         photoURL = {obj.photoURL}
         userID= {obj.id}
+        adminID={obj.id}
         />
         )
       })}

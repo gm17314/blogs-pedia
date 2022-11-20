@@ -4,6 +4,7 @@ import MyBlogCard from "./MyBlogCard";
 import { db } from "../Firebaseconfig";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useState } from "react";
+import { mobile } from "./Responsive";
 
 const MyBlogs = ({userID}) => {
   const collectionRef = collection(db, "blogs");
@@ -25,18 +26,23 @@ const MyBlogs = ({userID}) => {
   const Cards = styled.div`
     width: 90%;
     height: 45rem;
-    margin: auto;
+    margin: 4rem;
     /* display: flex; */
+    /* border:1px solid red; */
     overflow: auto;
     flex-direction: column;
     /* border: 1px solid grey; */
     &::-webkit-scrollbar {
-      width: 0.5rem;
+      width: .5rem;
     }
     &::-webkit-scrollbar-thumb {
-      border-radius: 0.5rem;
+      border-radius: .5rem;
       background-color: grey;
     }
+    ${mobile({
+       height: "80%"
+
+    })}
   `;
   return (
     <Cards>

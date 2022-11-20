@@ -1,10 +1,38 @@
-import React from "react";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { AuthContext } from "../AuthContext";
+import { db } from "../Firebaseconfig";
 import { headingfont, titlecolor } from "./Common";
 
 
-const ProfileSearchCard = ({email,photoURL,displayName,userID}) => {
+const ProfileSearchCard = ({email,photoURL,displayName,userID,adminID}) => {
+
+  const currentUser = useContext(AuthContext);
+  const [currentUserData, setCurrentUserData] = useState();
+  const docRef = doc(db, "users", currentUser.uid);
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
+      setCurrentUserData(doc.data());
+    });
+    // console.log(blogs)
+    return () => {
+      unsub();
+    };
+    // eslint-disable-next-line
+  }, []);
+  const handleFollowing = async () => {
+    if (currentUserData.following.includes(userID)) {
+      var ind = currentUserData.following.indexOf(userID);
+      currentUserData.following.splice(ind, 1);
+    } else {
+      currentUserData.following.push(userID);
+    }
+    await updateDoc(docRef, { following: currentUserData.following });
+  };
+
+
   const Card = styled.div`
     width: 93%;
     height: 9rem;
@@ -12,7 +40,7 @@ const ProfileSearchCard = ({email,photoURL,displayName,userID}) => {
     margin: 1.6rem;
     justify-content: space-between;
     align-items: center;
-    border-bottom:2px solid grey;
+    border-bottom:.2rem solid grey;
     
   `;
   const User = styled.div`
@@ -62,15 +90,21 @@ const ProfileSearchCard = ({email,photoURL,displayName,userID}) => {
   `;
   return (
     <Card>
-      <User>
-        <Img src={photoURL} />
-        <Detail>
-          <Name as={Link} to={`/profile/${userID}`}>{displayName}</Name>
-          <Email>{email}</Email>
-        </Detail>
-      </User>
-      <Button>Follow</Button>
-    </Card>
+    <User>
+      <Img src={photoURL} />
+      <Detail>
+        <Name as={Link} to={`/profile/${adminID}`}>{displayName}</Name>
+        <Email>{email}</Email>
+      </Detail>
+    </User>
+    <Button onClick={handleFollowing}>
+            {currentUserData?.following.includes(userID)?
+              "UnFollow"
+             : 
+              "Follow"
+            }
+    </Button>
+  </Card>
   );
 };
 
